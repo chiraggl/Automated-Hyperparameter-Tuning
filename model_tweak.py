@@ -1,4 +1,5 @@
 import random
+import os
 
 with open("hyperparameters.txt", "w") as f:
 	print("Epoch={}".format(random.randint(1, 20)), file=f)
@@ -10,3 +11,4 @@ with open("hyperparameters.txt", "w") as f:
 	print("Optimizers={}".format(random.choice(("Adam()","RMSprop()","SGD()","Nadam()","Adamax()","Adadelta()"))), file=f)
 	print("Pooling={}".format(random.choice(("MaxPooling2D()", "AveragePooling2D()"))), file=f)
 
+os.system("mv hyperparameters.txt /ws/")
