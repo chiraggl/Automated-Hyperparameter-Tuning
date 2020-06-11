@@ -4,12 +4,13 @@ from keras.optimizers import Adam, RMSprop, SGD, Nadam, Adamax, Adadelta
 from keras.utils.np_utils import to_categorical
 from keras.datasets import mnist
 import os
+import math
 
 def model_train(epoch, nCRP, nH, ksize, nfilter, neurons, optimizers, pooling):
-	#Load the MNIST dataset
+	# Load the MNIST dataset
 	dataset = mnist.load_data()
 
-	#Store the training and test values
+	# Store the training and test values
 	(X_train, y_train), (X_test, y_test)  = dataset
 
 	# Lets store the number of rows and columns
@@ -20,10 +21,10 @@ def model_train(epoch, nCRP, nH, ksize, nfilter, neurons, optimizers, pooling):
 	X_train = X_train.reshape(X_train.shape[0], img_rows, img_cols, 1)
 	X_test = X_test.reshape(X_test.shape[0], img_rows, img_cols, 1)
 
-	# store the shape of a single image 
+	# Store the shape of a single image 
 	input_shape = (img_rows, img_cols, 1)
 
-	# change our image type to float32 data type
+	# Change our image type to float32 data type
 	X_train = X_train.astype('float32')
 	X_test = X_test.astype('float32')
 
@@ -35,7 +36,7 @@ def model_train(epoch, nCRP, nH, ksize, nfilter, neurons, optimizers, pooling):
 	y_train = to_categorical(y_train)
 	y_test = to_categorical(y_test)
 
-	# create model
+	# Create model
 	model = Sequential()
 	
 	CRPLayer = 1
@@ -64,10 +65,9 @@ def model_train(epoch, nCRP, nH, ksize, nfilter, neurons, optimizers, pooling):
 	# Softmax (for Multi Classification)
 	model.add(Activation('softmax'))
 
-	#model.compile(optimizer=Adam(), loss='categorical_crossentropy', metrics=['accuracy'])
 	model.compile(optimizer=optimizers, loss='categorical_crossentropy', metrics=['accuracy'])
 
-	#Training the Model
+	# Training the Model
 	model.fit(X_train, y_train, epochs=epoch)
 
 	# Evaluate the performance of our trained model
@@ -78,13 +78,16 @@ def model_train(epoch, nCRP, nH, ksize, nfilter, neurons, optimizers, pooling):
 	# Get the percentage accuracy
 	accuracy = accuracy * 100
 	
+	# Rounding to nearest whole number
+	accuracy = math.floor(accuracy)
+	
 	model.save('mnist_model.h5')
 	
 	os.system("mv mnist_model.h5 /ws/")
 	
 	return accuracy
 
-#Set the value of Hyperparameters
+# Set the value of Hyperparameters
 epoch=1
 nCRP=1
 nH=1
@@ -98,7 +101,7 @@ pooling=MaxPooling2D()
 model_accuracy = model_train(epoch, nCRP, nH, ksize, nfilter, neurons, optimizers, pooling)
 
 
-#Print and save the accuracy in a file.
+# Print and save the accuracy in a file.
 with open("accuracy.txt", "w") as f:
     print(model_accuracy, file=f)
     
