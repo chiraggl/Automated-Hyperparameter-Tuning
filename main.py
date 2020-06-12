@@ -4,7 +4,6 @@ from keras.optimizers import Adam, RMSprop, SGD, Nadam, Adamax, Adadelta
 from keras.utils.np_utils import to_categorical
 from keras.datasets import mnist
 import os
-import math
 
 def model_train(epoch, nCRP, nH, ksize, nfilter, neurons, optimizers, pooling):
 	# Load the MNIST dataset
@@ -78,8 +77,8 @@ def model_train(epoch, nCRP, nH, ksize, nfilter, neurons, optimizers, pooling):
 	# Get the percentage accuracy
 	accuracy = accuracy * 100
 	
-	# Rounding to nearest whole number
-	accuracy = math.floor(accuracy)
+	# Rounding to 2 decimal places
+	accuracy = round(accuracy, 2)
 	
 	model.save('mnist_model.h5')
 	
